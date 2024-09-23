@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraped Jobs</title>
+</head>
+<body>
+    <h1>Scraped Job Listings</h1>
+    
+    <form method="GET" action="{% url 'scrape_jobs_search' search_job=search_job page_num=0 %}">
+        <input type="text" name="searchname" placeholder="Search for a job" value="{{ search_job }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        {% for job in jobs %}
+            <li>
+                <h3>
+                    <a href="{{ job.link }}" target="_blank">{{ job.title }}</a>
+                </h3>
+                <p>Company: {{ job.company }}</p>
+                <p>Location: {{ job.location }}</p>
+                <p>Platform: {{ job.platform }}</p>
+            </li>
+        {% empty %}
+            <li>No jobs found for your search.</li>
+        {% endfor %}
+    </ul>
+
+    <div>
+        {% if page_num > 0 %}
+            <a href="{% url 'scrape_jobs_search' search_job=search_job page_num=prev_page_num %}?searchname={{ search_job }}">Previous</a>
+        {% endif %}
+        <a href="{% url 'scrape_jobs_search' search_job=search_job page_num=next_page_num %}?searchname={{ search_job }}">Next</a>
+    </div>
+</body>
+</html>
